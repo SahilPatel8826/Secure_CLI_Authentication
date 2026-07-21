@@ -260,7 +260,7 @@ Interactive CLI startup.
 
 Create a new account.
 
-<img src="screenshot/register.png" width="900">
+<img src="internal/screenshot/register.png" width="900">
 
 ---
 
@@ -268,7 +268,7 @@ Create a new account.
 
 Secure authentication with session creation.
 
-<img src="screenshot/login.png" width="900">
+<img src="internal/screenshot/login.png" width="900">
 
 ---
 
@@ -276,7 +276,7 @@ Secure authentication with session creation.
 
 Generate a secret compatible with Google Authenticator.
 
-<img src="screenshot/enable-2fa.png" width="900">
+<img src="internal/screenshot/enable-2fa.png" width="900">
 
 ---
 
@@ -284,7 +284,7 @@ Generate a secret compatible with Google Authenticator.
 
 Scan using Google Authenticator.
 
-<img src="screenshot/2fa.png" width="350">
+<img src="internal/screenshot/2fa.png" width="350">
 
 ---
 
@@ -292,7 +292,7 @@ Scan using Google Authenticator.
 
 Display authenticated user information.
 
-<img src="screenshot/whoami.png" width="900">
+<img src="internal/screenshot/whoami.png" width="900">
 
 ---
 
@@ -300,7 +300,7 @@ Display authenticated user information.
 
 Available commands after login.
 
-<img src="screenshot/helpafterlogin.png" width="900">
+<img src="internal/screenshot/helpafterlogin.png" width="900">
 
 ---
 
@@ -308,7 +308,7 @@ Available commands after login.
 
 Terminate the active session.
 
-<img src="screenshot/logout.png" width="900">
+<img src="internal/screenshot/logout.png" width="900">
 
 ---
 
