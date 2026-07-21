@@ -292,7 +292,7 @@ Scan using Google Authenticator.
 
 Display authenticated user information.
 
-<img src="internal/screenshot/whoami.png" width="900">
+<img src="internal/screenshot/whoamI.png" width="900">
 
 ---
 
