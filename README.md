@@ -246,6 +246,70 @@ logout
 * CI/CD Pipeline
 * Multi-stage Docker Build
 
+# 📸 Screenshots
+
+## Home
+
+Interactive CLI startup.
+
+<img src="screenshot/home.png" width="900">
+
+---
+
+## User Registration
+
+Create a new account.
+
+<img src="screenshot/register.png" width="900">
+
+---
+
+## User Login
+
+Secure authentication with session creation.
+
+<img src="screenshot/login.png" width="900">
+
+---
+
+## Enable Two-Factor Authentication
+
+Generate a secret compatible with Google Authenticator.
+
+<img src="screenshot/enable-2fa.png" width="900">
+
+---
+
+## QR Code
+
+Scan using Google Authenticator.
+
+<img src="screenshot/2fa.png" width="350">
+
+---
+
+## Current User
+
+Display authenticated user information.
+
+<img src="screenshot/whoami.png" width="900">
+
+---
+
+## Help Menu
+
+Available commands after login.
+
+<img src="screenshot/helpafterlogin.png" width="900">
+
+---
+
+## Logout
+
+Terminate the active session.
+
+<img src="screenshot/logout.png" width="900">
+
 ---
 
 # 👨‍💻 Author

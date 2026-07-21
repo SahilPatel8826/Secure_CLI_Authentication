@@ -22,14 +22,24 @@ func NewCLI(auth *service.AuthService) *CLI {
 	}
 }
 
+// updatePrompt updates the terminal prompt based on
+// the current authentication state.
 func (c *CLI) updatePrompt(rl *readline.Instance) {
+
 	if c.currentUser != nil {
-		rl.SetPrompt(fmt.Sprintf("auth(%s)> ", c.currentUser.Username))
+		rl.SetPrompt(fmt.Sprintf("👤 %s > ", c.currentUser.Username))
 	} else {
-		rl.SetPrompt("auth> ")
+		rl.SetPrompt("🔐 guest > ")
 	}
 }
 
+// Run starts the interactive command-line interface.
+//
+// Features:
+// - Command history
+// - Auto completion
+// - Interactive shell
+// - Dynamic prompt
 func (c *CLI) Run() {
 
 	rl, err := readline.NewEx(&readline.Config{
@@ -81,8 +91,11 @@ func (c *CLI) Run() {
 
 		case "enable-2fa":
 			c.Enable2FA(rl)
+		case "disable-2fa":
+			c.Disable2FA()
 
 		case "exit":
+			fmt.Println("\nThank you for using Auth CLI.")
 			fmt.Println("Goodbye!")
 			return
 
@@ -91,6 +104,8 @@ func (c *CLI) Run() {
 		}
 	}
 }
+
+// Register creates a new user account.
 
 func (c *CLI) Register(rl *readline.Instance) {
 
@@ -111,9 +126,18 @@ func (c *CLI) Register(rl *readline.Instance) {
 		return
 	}
 
-	fmt.Println("Registration Successful")
+	fmt.Println(`
+------------------------------------------
+Registration completed successfully.
+
+You can now login using your credentials.
+------------------------------------------
+`)
 	c.updatePrompt(rl)
 }
+
+// Login authenticates a user using
+// username, password and optional TOTP.
 
 func (c *CLI) Login(rl *readline.Instance) {
 
@@ -151,9 +175,35 @@ func (c *CLI) Login(rl *readline.Instance) {
 	c.currentUser = user
 	c.currentToken = session.Token
 
-	fmt.Println("Login Successful")
+	fmt.Println(`
+==========================================
+           LOGIN SUCCESSFUL
+==========================================
+`)
+
+	fmt.Printf("Username           : %s\n", user.Username)
+	fmt.Printf("Registered         : %s\n", user.CreatedAt.Format("02 Jan 2006 03:04 PM"))
+
+	if user.MFASecret != "" {
+		fmt.Println("MFA Status         : Enabled")
+	} else {
+		fmt.Println("MFA Status         : Disabled")
+	}
+
+	fmt.Printf("Session Expires    : %s\n", session.ExpiresAt.Format("02 Jan 2006 03:04 PM"))
+
+	if user.LastLogin != nil {
+		fmt.Printf("Last Login         : %s\n", user.LastLogin.Format("02 Jan 2006 03:04 PM"))
+	} else {
+		fmt.Println("Last Login         : First Login")
+	}
+
+	fmt.Println("==========================================")
+
 	c.updatePrompt(rl)
 }
+
+// Logout terminates the current session.
 
 func (c *CLI) Logout(rl *readline.Instance) {
 
@@ -175,6 +225,8 @@ func (c *CLI) Logout(rl *readline.Instance) {
 	c.updatePrompt(rl)
 }
 
+// WhoAmI displays information about
+// the currently authenticated user.
 func (c *CLI) WhoAmI() {
 
 	if c.currentToken == "" {
@@ -188,8 +240,11 @@ func (c *CLI) WhoAmI() {
 		return
 	}
 
-	fmt.Println("\nCurrent User")
-	fmt.Println("------------")
+	fmt.Println(`
+==========================================
+            CURRENT USER
+==========================================
+`)
 	fmt.Println("Username :", user.Username)
 	fmt.Println("MFA status :", user.MFAEnabled)
 	fmt.Println("Registation Date :", user.CreatedAt.Format("02 Jan 2006 15:04:05"))
@@ -201,25 +256,56 @@ func (c *CLI) WhoAmI() {
 	}
 }
 
+// Help displays all available commands
+// depending on authentication status.
+
 func (c *CLI) Help() {
 	if c.currentUser == nil {
-		fmt.Println("\nAvailable Commands")
-		fmt.Println("------------------")
-		fmt.Println("register")
-		fmt.Println("login")
-		fmt.Println("help")
-		fmt.Println("exit")
+		fmt.Println(`
+==========================================
+Available Commands
+==========================================
+
+Authentication
+
+ register       Create a new account
+ login          Login into your account
+
+General
+
+ help           Display help
+ exit           Exit application
+
+==========================================
+`)
 	} else {
-		fmt.Println("\nAvailable Commands")
-		fmt.Println("------------------")
-		fmt.Println("whoami")
-		fmt.Println("logout")
-		fmt.Println("enable-2fa")
-		fmt.Println("disable-2fa")
-		fmt.Println("help")
-		fmt.Println("exit")
+		fmt.Println(`
+==========================================
+Available Commands
+==========================================
+
+Session
+
+ whoami         Show current user
+ logout         Logout
+
+Security
+
+ enable-2fa     Enable Two-Factor Authentication
+ disable-2fa    Disable Two-Factor Authentication
+
+General
+
+ help           Display help
+ exit           Exit application
+
+==========================================
+`)
 	}
 }
+
+// Enable2FA enables Time-based One-Time Password
+// authentication for the current user.
 func (c *CLI) Enable2FA(rl *readline.Instance) {
 
 	if c.currentToken == "" {
@@ -238,11 +324,16 @@ func (c *CLI) Enable2FA(rl *readline.Instance) {
 		return
 	}
 
-	fmt.Println("\n========== MFA SETUP ==========")
-	fmt.Println("Add this secret to Google Authenticator")
-	fmt.Println()
-	fmt.Println(secret)
-	fmt.Println()
+	fmt.Println(`
+==========================================
+        TWO-FACTOR SETUP
+==========================================
+
+Scan the generated QR code using
+Google Authenticator.
+
+Or enter the secret below manually.
+`)
 
 	rl.SetPrompt("Enter OTP: ")
 	otp, _ := rl.Readline()
@@ -262,6 +353,9 @@ func (c *CLI) Enable2FA(rl *readline.Instance) {
 
 	c.updatePrompt(rl)
 }
+
+// Disable2FA disables TOTP authentication
+// for the current user.
 func (c *CLI) Disable2FA() {
 
 	if c.currentToken == "" {
