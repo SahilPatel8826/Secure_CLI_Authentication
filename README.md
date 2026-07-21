@@ -252,7 +252,7 @@ logout
 
 Interactive CLI startup.
 
-<img src="screenshot/home.png" width="900">
+<img src="internal/screenshot/home.png" width="900">
 
 ---
 
